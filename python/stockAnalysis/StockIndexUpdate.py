@@ -55,8 +55,17 @@ def UpdateIndexs():
         db.set(command)
         historys = GetIndex(index_code, __begin_year, __end_year)
         for record in historys:
+            date = record[0]
+            try :
+                price = float(record[4])
+            except :
+                price = 0
+            try :
+                volume = float(record[7])
+            except :
+                volume = 0
             #print ("%s %s %s" % (record[0], record[4], record[7]))
-            command = "replace into `{}` values({},{},{})".format(index_code, record[0], record[4], record[7])
+            command = "replace into `{}` values({},{},{})".format(index_code, date, str(price), str(volume))
             #print (command)
             db.set(command)
     db.close()
