@@ -5,6 +5,7 @@ import LOG
 import URL
 
 __index_db = 'stock_index'
+__index_table = 'code'
 __index_url = 'http://quotes.money.163.com/trade/lsjysj_zhishu_{}.html'
 __index_url_date = __index_url+'?year={}&season={}'
 __begin_index=1
@@ -38,7 +39,7 @@ def GetIndex(id, year_from, year_to):
                     value = value.replace(',', '')
                     record.append(value)
                 indexs.append(record)
-    indexs.sort(key=lambda x:x[0])
+    indexs.sort(key = lambda x:x[0])
                                        
     return indexs
 
@@ -48,7 +49,7 @@ def UpdateIndexs():
         index_code = index[0]
         index_name = index[1]
         LOG.info ("Updating index %s %s" % (index_code, index_name))
-        command = "create table if not exists `{}`(date char(8) unique, price double, volume double)".format(index_code)
+        command = "CREATE TABLE IF NOT EXISTS `{}`(date char(8) unique, price double, volume double)".format(index_code)
         db.set(command)
         historys = GetIndex(index_code, __begin_year, __end_year)
         for record in historys:
@@ -62,14 +63,14 @@ def UpdateIndexs():
             except :
                 volume = 0
             #print ("%s %s %s" % (record[0], record[4], record[7]))
-            command = "replace into `{}` values({},{},{})".format(index_code, date, str(price), str(volume))
+            command = "REPLACE INTO `{}` VALUES({},{},{})".format(index_code, date, str(price), str(volume))
             #print (command)
             db.set(command)
     db.close()
 
 def UpdateCodes():
     db = SQL.sql(__index_db)
-    db.set("create table if not exists code(code char(6) unique, name char(36))")
+    db.set("CREATE TABLE IF NOT EXISTS {}(code char(6) unique, name char(36))".format(__index_table))
     for index in range(__begin_index, __end_index):
         index_str='{:0>6}'.format(index)
         content = URL.request(__index_url.format(index_str))
@@ -85,7 +86,7 @@ def UpdateCodes():
         index_name = content[index_begin + 17:index_end]
         LOG.info ('%s %s' %(index_code, index_name))
         __indexs.append([index_code, index_name])
-        db.set("replace into code values(\'{}\',\'{}\')".format(index_code, index_name))
+        db.set("REPLACE INTO {} VALUES(\'{}\',\'{}\')".format(__index_table, index_code, index_name))
     db.close()
 
 UpdateCodes()

@@ -1,4 +1,7 @@
-import pymysql;
+import pymysql
+import warnings
+
+warnings.filterwarnings('ignore')
 
 class sql:
     __host = ''
