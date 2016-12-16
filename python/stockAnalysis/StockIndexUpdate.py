@@ -1,7 +1,8 @@
-import SQL
-import urllib.request
 import string
 import time
+import SQL
+import LOG
+import URL
 
 __index_db = 'stock_index'
 __index_url = 'http://quotes.money.163.com/trade/lsjysj_zhishu_{}.html'
@@ -16,10 +17,7 @@ def GetIndex(id, year_from, year_to):
     indexs=[]
     for year in range(year_from, year_to + 1):
         for season in range(1, 5):
-            #print (__index_url_date.format(str(id),str(year),str(season)))
-            s = urllib.request.urlopen(__index_url_date.format(str(id),str(year),str(season)))
-            #print (s)
-            content = str(s.read().decode('utf-8'))
+            content = URL.request(__index_url_date.format(str(id),str(year),str(season)))
             search_begin = content.find('<table class=')
             if search_begin == -1 :
                 continue
@@ -49,9 +47,8 @@ def UpdateIndexs():
     for index in __indexs:
         index_code = index[0]
         index_name = index[1]
-        print ("Updating index %s %s" % (index_code, index_name))
+        LOG.info ("Updating index %s %s" % (index_code, index_name))
         command = "create table if not exists `{}`(date char(8) unique, price double, volume double)".format(index_code)
-        print (command)
         db.set(command)
         historys = GetIndex(index_code, __begin_year, __end_year)
         for record in historys:
@@ -75,28 +72,21 @@ def UpdateCodes():
     db.set("create table if not exists code(code char(6) unique, name char(36))")
     for index in range(__begin_index, __end_index):
         index_str='{:0>6}'.format(index)
-        try:
-            s = urllib.request.urlopen(__index_url.format(index_str))
-        except:
-            print ('No index %s' %(index_str))
-            continue
-        content = str(s.read().decode('utf-8'))
+        content = URL.request(__index_url.format(index_str))
         index_begin = content.find('var STOCKSYMBOL = \'')
         if index_begin == -1:
-            break
+            continue
         index_end = content.find('\'', index_begin + 19)
         index_code = content[index_begin + 19:index_end]
         index_begin = content.find('var STOCKNAME = \'')
         if index_begin == -1:
-            break
+            continue
         index_end = content.find('\'', index_begin + 17)
         index_name = content[index_begin + 17:index_end]
-        print ('%s %s' %(index_code, index_name))
+        LOG.info ('%s %s' %(index_code, index_name))
         __indexs.append([index_code, index_name])
         db.set("replace into code values(\'{}\',\'{}\')".format(index_code, index_name))
-        s.close()
     db.close()
-    #print (__indexs)
 
 UpdateCodes()
 UpdateIndexs()
