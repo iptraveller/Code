@@ -36,9 +36,13 @@ class sql:
         rows = self.__cursor.fetchall()
         return rows
     
+    def getone(self, command) :
+        nr_rows = self.__cursor.execute(command)
+        row = self.__cursor.fetchone()
+        return row
+    
     def close(self) :
         if self.__cursor != None :
             self.__cursor.close()
         if self.__conn != None :
             self.__conn.close()
-
