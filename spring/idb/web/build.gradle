@@ -1,4 +1,8 @@
+apply plugin: 'application'
+apply plugin: 'war'
+
 dependencies {
     compile project(':service')
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
