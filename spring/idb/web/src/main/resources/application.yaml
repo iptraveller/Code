@@ -4,3 +4,12 @@ spring:
     url: jdbc:mysql://172.18.33.191:33306/test
     username: root
     password: 111111
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.idb: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: D:\\test.log
