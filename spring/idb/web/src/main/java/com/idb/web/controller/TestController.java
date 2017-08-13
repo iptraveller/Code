@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TestController {
@@ -14,7 +15,7 @@ public class TestController {
     TestService testService;
 
     @GetMapping("/test")
-    public List<Test> test() {
+    public List<Map<String, Object>> test() {
         return testService.getTests();
     }
 }

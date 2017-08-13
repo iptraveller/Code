@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="head"></div>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../plugins/datatables/dataTables.bootstrap.css"/>
+    <title>终端统计</title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box">
+                        <div class="box-body">
+                            <div id="manufacturer" style="width:500px; height: 500px;"></div>
+                            <div id="band" style="width:500px; height: 500px;"></div>
+                            <div id="os" style="width:500px; height: 500px;"></div>
+                            <div id="clientType" style="width:500px; height: 500px;"></div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+</div>
+
+<div th:replace="script"></div>
+
+<!-- page script -->
+<script src="../js/echarts.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    drawPie('/sta/getManufacturerStatistics','厂商统计','manufacturer')
+    drawPie('/sta/getBandStatistics','双频能力统计','band')
+    drawPie('/sta/getOsStatistics','操作系统统计','os')
+    drawPie('/sta/getClientTypeStatistics','终端类型统计','clientType')
+</script>
+</body>
+</html>
