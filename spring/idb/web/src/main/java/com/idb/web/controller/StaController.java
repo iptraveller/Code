@@ -108,7 +108,6 @@ public class StaController {
     @RequestMapping(value="/getStaCountList", method=RequestMethod.POST)
     @ResponseBody
     public List<Map<String, Object>> getStaCountList(HttpServletRequest request, HttpServletResponse response) {
-        logger.error("fuck count");
         return staService.getStaCountList();
     }
 

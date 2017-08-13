@@ -19,7 +19,6 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        logger.error("fuck");
         DecimalFormat df = new DecimalFormat("#,###");
         Integer staNum = staService.getStaCount("");
         model.addAttribute("staNum", df.format(staNum));
