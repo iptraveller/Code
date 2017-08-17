@@ -111,6 +111,24 @@ public class StaController {
         return staService.getStaCountList();
     }
 
+    @RequestMapping(value="/getStaCountProject", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getStaCountProject(HttpServletRequest request, HttpServletResponse response) {
+        return staService.getStaCountProject();
+    }
+
+    @RequestMapping(value="/getStaCountIndustry", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getStaCountIndustry(HttpServletRequest request, HttpServletResponse response) {
+        return staService.getStaCountIndustry();
+    }
+
+    @RequestMapping(value="/getStaCountProvince", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getStaCountProvince(HttpServletRequest request, HttpServletResponse response) {
+        return staService.getStaCountProvince();
+    }
+
     @RequestMapping(value="/getManufacturerStatistics", method=RequestMethod.POST)
     @ResponseBody
     public List<Map<String, Object>> getManufacturerStatistics(HttpServletRequest request, HttpServletResponse response) {

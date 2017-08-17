@@ -56,6 +56,16 @@ public class StaService {
         return staMapper.getStaCountList();
     }
 
+    public List<Map<String, Object>> getStaCountProject() { return staMapper.getStaCountProject(); }
+
+    public List<Map<String, Object>> getStaCountIndustry() {
+        return staMapper.getStaCountIndustry();
+    }
+
+    public List<Map<String, Object>> getStaCountProvince() {
+        return staMapper.getStaCountProvince();
+    }
+
     public List<Map<String, Object>> getSta5gCount() {
         return staMapper.getSta5gCount();
     }

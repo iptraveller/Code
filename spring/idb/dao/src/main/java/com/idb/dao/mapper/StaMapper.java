@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface StaMapper {
-    @Select("SELECT COUNT(*) FROM sta_merge")
+    @Select("SELECT COUNT(*) FROM sta_full")
     Integer getCountAll();
 
-    @Select("SELECT COUNT(*) FROM sta_merge WHERE mac LIKE #{mac}")
+    @Select("SELECT COUNT(*) FROM sta_full WHERE mac LIKE #{mac}")
     Integer getCountLike(@Param("mac") String mac);
 
-    @Select("SELECT * FROM sta_merge WHERE mac = #{mac}")
+    @Select("SELECT * FROM sta_full WHERE mac = #{mac}")
     @Results({
             @Result(property = "mac", column = "mac", javaType = String.class),
             @Result(property = "username", column = "username", javaType = String.class),
@@ -42,7 +42,7 @@ public interface StaMapper {
     })
     Sta getByMac(String mac);
 
-    @Select("SELECT * FROM sta_merge ORDER BY mac LIMIT #{start},#{length}")
+    @Select("SELECT * FROM sta_full ORDER BY mac LIMIT #{start},#{length}")
     @Results({
             @Result(property = "mac", column = "mac", javaType = String.class),
             @Result(property = "username", column = "username", javaType = String.class),
@@ -65,7 +65,7 @@ public interface StaMapper {
     })
     List<Sta> getListAll(@Param("start") Integer start, @Param("length")  Integer length);
 
-    @Select("SELECT * FROM sta_merge WHERE mac LIKE #{mac} ORDER BY mac LIMIT #{start},#{length}")
+    @Select("SELECT * FROM sta_full WHERE mac LIKE #{mac} ORDER BY mac LIMIT #{start},#{length}")
     @Results({
             @Result(property = "mac", column = "mac", javaType = String.class),
             @Result(property = "username", column = "username", javaType = String.class),
@@ -115,6 +115,27 @@ public interface StaMapper {
     })
     List<Map<String, Object>> getStaCountList();
 
+    @Select("select name,sum(count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id group by project_id order by count desc limit 20;")
+    @Results({
+            @Result(property = "projectName", column = "name", javaType = String.class),
+            @Result(property = "count", column = "count", javaType = Integer.class),
+    })
+    List<Map<String, Object>> getStaCountProject();
+
+    @Select("select industry,sum(count) as count from (select project_id,name,industry,sum(count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id group by project_id) as t1 group by industry order by count desc;")
+    @Results({
+        @Result(property = "industry", column = "industry", javaType = String.class),
+        @Result(property = "count", column = "count", javaType = Integer.class),
+    })
+    List<Map<String, Object>> getStaCountIndustry();
+
+    @Select("select province,sum(count) as count from (select project_id,name,province,sum(count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id group by project_id) as t1 group by province order by count desc;")
+    @Results({
+            @Result(property = "province", column = "province", javaType = String.class),
+            @Result(property = "count", column = "count", javaType = Integer.class),
+    })
+    List<Map<String, Object>> getStaCountProvince();
+
     @Select("SELECT * FROM sta_band_count")
     @Results({
             @Result(property = "is5g", column = "band", javaType = Integer.class),
@@ -140,6 +161,7 @@ public interface StaMapper {
     @Results({
             @Result(property = "manufacturer", column = "manufacturer_short", javaType = String.class),
             @Result(property = "count", column = "count", javaType = Integer.class),
-    })
+})
     List<Map<String, Object>> getManufacturerCount();
+
 }

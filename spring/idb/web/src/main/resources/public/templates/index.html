@@ -123,7 +123,10 @@
                         <!-- /.box-header -->
 
                         <div class="box-body">
-                            <div id="chartmain" style="width:1000px; height: 400px;"></div>
+                            <div id="sta_count_chart" style="width:1200px; height: 300px;"></div>
+                            <div id="sta_project_chart" style="width:1200px; height: 400px;"></div>
+                            <div id="sta_industry_chart" style="width:1200px; height: 300px;"></div>
+                            <div id="sta_province_chart" style="width:1200px; height: 300px;"></div>
                         </div>
                         <!-- ./box-body -->
                     </div>
@@ -213,7 +216,7 @@
 
             var option = {
                 title : {
-                    text: '终端数',
+                    text: '终端总数',
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -250,11 +253,194 @@
 
 
             //初始化echarts实例
-            var myChart = echarts.init(document.getElementById('chartmain'));
+            var myChart = echarts.init(document.getElementById('sta_count_chart'));
             //使用制定的配置项和数据显示图表
             myChart.setOption(option);
         }
     });
 
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaCountProject",
+        "dataType":"json",
+        "success":function(response) {
+            var xData = []
+            var count = []
+            response.forEach(function(value) {
+                xData.push(value.projectName)
+                count.push(value.count)
+            });
+
+            var option = {
+                title : {
+                    text: '项目终端统计Top 20',
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                grid : {
+                    y2: 150
+                },
+                legend: {
+                    data:['累计终端']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        axisLabel:{
+                            interval: 0,
+                            rotate:30
+                        },
+                        data : xData
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'累计终端',
+                        type:'bar',
+                        itemStyle: {
+                            normal: {
+                                color: "#ff0b00"
+                            }
+                        },
+                        data:count,
+                    }
+                ]
+            };
+
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_project_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaCountIndustry",
+        "dataType":"json",
+        "success":function(response) {
+            var xData = []
+            var count = []
+            response.forEach(function(value) {
+                xData.push(value.industry)
+                count.push(value.count)
+            });
+
+            var option = {
+                title : {
+                    text: '行业终端统计',
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['累计终端']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        axisLabel:{
+                            interval: 0,
+                            rotate:30
+                        },
+                        data : xData
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'累计终端',
+                        type:'bar',
+                        itemStyle: {
+                            normal: {
+                                color: "#ff0b00"
+                            }
+                        },
+                        data:count,
+                    }
+                ]
+            };
+
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_industry_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
+
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaCountProvince",
+        "dataType":"json",
+        "success":function(response) {
+            var xData = []
+            var count = []
+            response.forEach(function(value) {
+                xData.push(value.province)
+                count.push(value.count)
+            });
+
+            var option = {
+                title : {
+                    text: '区域终端统计',
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['累计终端']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        axisLabel:{
+                            interval: 0,
+                            rotate:30
+                        },
+                        data : xData
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'累计终端',
+                        type:'bar',
+                        itemStyle: {
+                            normal: {
+                                color: "#ff0b00"
+                            }
+                        },
+                        data:count
+                    }
+                ]
+            };
+
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_province_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
 </script>
 </html>
