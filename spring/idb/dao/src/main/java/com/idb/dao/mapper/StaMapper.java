@@ -115,6 +115,14 @@ public interface StaMapper {
     })
     List<Map<String, Object>> getStaCountList();
 
+    @Select("select date,project.industry,sum(total_count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id WHERE TO_DAYS(NOW()) - TO_DAYS(date) <= 30 group by date,industry order by industry,date;")
+    @Results({
+            @Result(property = "date", column = "date", javaType = Date.class),
+            @Result(property = "industry", column = "industry", javaType = String.class),
+            @Result(property = "count", column = "count", javaType = Integer.class),
+    })
+    List<Map<String, Object>> getStaIndustryList();
+
     @Select("select name,sum(count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id group by project_id order by count desc limit 20;")
     @Results({
             @Result(property = "projectName", column = "name", javaType = String.class),

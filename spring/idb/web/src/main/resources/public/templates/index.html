@@ -125,8 +125,8 @@
                         <div class="box-body">
                             <div id="sta_count_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_project_chart" style="width:1200px; height: 400px;"></div>
-                            <div id="sta_industry_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_province_chart" style="width:1200px; height: 300px;"></div>
+                            <div id="sta_industry_chart" style="width:1200px; height: 300px;"></div>
                         </div>
                         <!-- ./box-body -->
                     </div>
@@ -213,7 +213,6 @@
                 serialWis.push(value.wisTotalCount)
                 serialMohoo.push(value.mohooTotalCount)
             });
-
             var option = {
                 title : {
                     text: '终端总数',
@@ -250,10 +249,156 @@
                     }
                 ]
             };
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_count_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaIndustryList",
+        "dataType":"json",
+        "success":function(response) {
+            var dateList = response.date
+            var university = response.university
+            var sell = response.sell
+            var finance = response.finance
+            var telcom = response.telcom
+            var energy = response.energy
+            var oversea = response.oversea
+            var service = response.service
+            var school = response.school
+            var government = response.government
+            var hospital = response.hospital
+            var manufacturing = response.manufacturing
+            var enterprise = response.enterprise
+            var traffic = response.traffic
+            var internet = response.internet
+            var others = response.others
+
+            var xData = []
+            dateList.forEach(function(value) {
+                var time = new Date(value)
+                xData.push(time.Format("yyyy-MM-dd"))
+            });
+
+            var option = {
+                title : {
+                    text: '行业累计终端'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['高教','运营商','医疗','企业其他','服务业','交通','政府','普教','金融','','零售','制造业']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xData
+                    }
+                ],
+                color: [
+                    '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#40e0d0',
+                    '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#ffd700',
+                    '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0',
+                    '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed'
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'高教',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:university
+                    },
+                    {
+                        name:'运营商',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:telcom
+                    },
+                    {
+                        name:'医疗',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:hospital
+                    },
+                    {
+                        name:'企业其他',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:enterprise
+                    },
+                    {
+                        name:'服务业',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:service
+                    },
+                    {
+                        name:'交通',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:traffic
+                    },
+                    {
+                        name:'政府',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:government
+                    },
+                    {
+                        name:'普教',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:school
+                    },
+                    {
+                        name:'金融',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:finance
+                    },
+                    {
+                        name:'零售',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal:{areaStyle: {type: 'default'}}},
+                        data:sell
+                    },
+                    {
+                        name:'制造业',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:manufacturing
+                    }
+                ]
+            };
+
 
 
             //初始化echarts实例
-            var myChart = echarts.init(document.getElementById('sta_count_chart'));
+            var myChart = echarts.init(document.getElementById('sta_industry_chart'));
             //使用制定的配置项和数据显示图表
             myChart.setOption(option);
         }
@@ -310,7 +455,7 @@
                                 color: "#ff0b00"
                             }
                         },
-                        data:count,
+                        data:count
                     }
                 ]
             };
@@ -321,67 +466,6 @@
             myChart.setOption(option);
         }
     });
-
-    $.ajax({
-        "type":"post",
-        "async":false,
-        "url":"/sta/getStaCountIndustry",
-        "dataType":"json",
-        "success":function(response) {
-            var xData = []
-            var count = []
-            response.forEach(function(value) {
-                xData.push(value.industry)
-                count.push(value.count)
-            });
-
-            var option = {
-                title : {
-                    text: '行业终端统计',
-                },
-                tooltip : {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['累计终端']
-                },
-                calculable : true,
-                xAxis : [
-                    {
-                        type : 'category',
-                        axisLabel:{
-                            interval: 0,
-                            rotate:30
-                        },
-                        data : xData
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value'
-                    }
-                ],
-                series : [
-                    {
-                        name:'累计终端',
-                        type:'bar',
-                        itemStyle: {
-                            normal: {
-                                color: "#ff0b00"
-                            }
-                        },
-                        data:count,
-                    }
-                ]
-            };
-
-            //初始化echarts实例
-            var myChart = echarts.init(document.getElementById('sta_industry_chart'));
-            //使用制定的配置项和数据显示图表
-            myChart.setOption(option);
-        }
-    });
-
 
     $.ajax({
         "type":"post",

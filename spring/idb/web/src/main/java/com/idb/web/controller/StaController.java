@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/sta")
@@ -109,6 +106,72 @@ public class StaController {
     @ResponseBody
     public List<Map<String, Object>> getStaCountList(HttpServletRequest request, HttpServletResponse response) {
         return staService.getStaCountList();
+    }
+
+    private String industryToShort(String industry) {
+        if (industry.contains("高教")) {
+            return "university";
+        } else if (industry.contains("零售")) {
+            return "sell";
+        } else if (industry.contains("金融")) {
+            return "finance";
+        } else if (industry.contains("运营商")) {
+            return "telcom";
+        } else if (industry.contains("能源")) {
+            return "energy";
+        } else if (industry.contains("海外市场")) {
+            return "oversea";
+        } else if (industry.contains("服务业")) {
+            return "service";
+        } else if (industry.contains("普教")) {
+            return "school";
+        } else if (industry.contains("政府")) {
+            return "government";
+        } else if (industry.contains("医疗")) {
+            return "hospital";
+        } else if (industry.contains("制造业")) {
+            return "manufacturing ";
+        } else if (industry.contains("企业其他")) {
+            return "enterprise";
+        } else if (industry.contains("交通")) {
+            return "traffic";
+        } else if (industry.contains("互联网")) {
+            return "internet";
+        } else {
+            return "others";
+        }
+    }
+
+    @RequestMapping(value="/getStaIndustryList", method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String, List<Object>> getStaIndustryList(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, List<Object>> result = new HashMap<>();
+        List<Map<String, Object>> list = staService.getStaIndustryList();
+        String industry = null;
+        List<Object> industryList = new ArrayList<>();
+        List<Object> dateList = new ArrayList<>();
+        boolean haveDate = false;
+        for (Map<String, Object> map: list) {
+            if (industry != null && !map.get("industry").toString().equals(industry)) {
+                result.put(industryToShort(industry), industryList);
+                if (!haveDate) {
+                    result.put("date", dateList);
+                    haveDate = true;
+                }
+                industryList = new ArrayList<>();
+            }
+            industry = map.get("industry").toString();
+            industryList.add(map.get("count"));
+            if (!haveDate) {
+                dateList.add(map.get("date"));
+            }
+        }
+        if (!haveDate) {
+            result.put("date", dateList);
+        }
+        result.put(industryToShort(industry), industryList);
+
+        return result;
     }
 
     @RequestMapping(value="/getStaCountProject", method=RequestMethod.POST)
