@@ -115,6 +115,13 @@ public interface StaMapper {
     })
     List<Map<String, Object>> getStaCountList();
 
+    @Select("select date,count(*) as count from sta_active group by date order by date")
+    @Results({
+            @Result(property = "date", column = "date", javaType = Date.class),
+            @Result(property = "count", column = "count", javaType = Integer.class),
+    })
+    List<Map<String, Object>> getStaActiveCountList();
+
     @Select("select date,project.industry,sum(total_count) as count from sta_count_project inner join project on sta_count_project.project_id = project.id WHERE TO_DAYS(NOW()) - TO_DAYS(date) <= 30 group by date,industry order by industry,date;")
     @Results({
             @Result(property = "date", column = "date", javaType = Date.class),
@@ -169,7 +176,13 @@ public interface StaMapper {
     @Results({
             @Result(property = "manufacturer", column = "manufacturer_short", javaType = String.class),
             @Result(property = "count", column = "count", javaType = Integer.class),
-})
+    })
     List<Map<String, Object>> getManufacturerCount();
 
+    @Select("SELECT province,city FROM sta_location WHERE mac = #{mac}")
+    @Results({
+            @Result(property = "province", column = "province", javaType = String.class),
+            @Result(property = "city", column = "city", javaType = String.class)
+    })
+    Map<String, Object> getStaLocation(String mac);
 }

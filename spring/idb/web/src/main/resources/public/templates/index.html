@@ -124,6 +124,7 @@
 
                         <div class="box-body">
                             <div id="sta_count_chart" style="width:1200px; height: 300px;"></div>
+                            <div id="sta_active_count_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_project_chart" style="width:1200px; height: 400px;"></div>
                             <div id="sta_province_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_industry_chart" style="width:1200px; height: 300px;"></div>
@@ -251,6 +252,57 @@
             };
             //初始化echarts实例
             var myChart = echarts.init(document.getElementById('sta_count_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaActiveCountList",
+        "dataType":"json",
+        "success":function(response) {
+            var xData = []
+            var serialWis = []
+            response.forEach(function(value) {
+                var time = new Date(value.date)
+                xData.push(time.Format("yyyy-MM-dd"))
+                serialWis.push(value.count)
+            });
+            var option = {
+                title : {
+                    text: '日活跃终端数'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['wis终端']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xData
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'wis终端',
+                        type:'line',
+                        data:serialWis
+                    }
+                ]
+            };
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_active_count_chart'));
             //使用制定的配置项和数据显示图表
             myChart.setOption(option);
         }

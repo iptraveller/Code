@@ -48,12 +48,20 @@ public class StaService {
         return staMapper.getOui(mac.substring(0, 7));
     }
 
+    public Map<String, Object> getStaLocation(String mac) {
+        return staMapper.getStaLocation(mac);
+    }
+
     public Project getStaProject(String id) {
         return staMapper.getProject(id);
     }
 
     public List<Map<String, Object>> getStaCountList() {
         return staMapper.getStaCountList();
+    }
+
+    public List<Map<String, Object>> getStaActiveCountList() {
+        return staMapper.getStaActiveCountList();
     }
 
     public List<Map<String, Object>> getStaIndustryList() { return staMapper.getStaIndustryList(); }

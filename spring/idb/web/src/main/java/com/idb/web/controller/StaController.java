@@ -89,6 +89,12 @@ public class StaController {
                 staMap.put("location", project.getProvince());
             } else {
                 staMap.put("location", "");
+                Map<String, Object> locationMap = staService.getStaLocation(sta.getMac());
+                if (locationMap != null) {
+                    if (locationMap.get("province") != null) {
+                        staMap.put("location", locationMap.get("province").toString());
+                    }
+                }
             }
             if (sta.getSource() == 0) {
                 staMap.put("source", "wis");
@@ -106,6 +112,12 @@ public class StaController {
     @ResponseBody
     public List<Map<String, Object>> getStaCountList(HttpServletRequest request, HttpServletResponse response) {
         return staService.getStaCountList();
+    }
+
+    @RequestMapping(value="/getStaActiveCountList", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getStaActiveCountList(HttpServletRequest request, HttpServletResponse response) {
+        return staService.getStaActiveCountList();
     }
 
     private String industryToShort(String industry) {
