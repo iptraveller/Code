@@ -105,7 +105,7 @@ public interface StaMapper {
     })
     Project getProject(String id);
 
-    @Select("SELECT * FROM sta_count WHERE TO_DAYS(NOW()) - TO_DAYS(date) <= 100 ORDER BY date")
+    @Select("SELECT * FROM sta_count WHERE TO_DAYS(NOW()) - TO_DAYS(date) <= 100 and TO_DAYS(NOW()) - TO_DAYS(date) > 0 ORDER BY date")
     @Results({
             @Result(property = "date", column = "date", javaType = Date.class),
             @Result(property = "wisCount", column = "wis_count", javaType = Integer.class),
@@ -115,7 +115,7 @@ public interface StaMapper {
     })
     List<Map<String, Object>> getStaCountList();
 
-    @Select("select date,count(*) as count from sta_active group by date order by date")
+    @Select("select date,count(*) as count from sta_active where TO_DAYS(NOW()) - TO_DAYS(date) > 0 group by date order by date")
     @Results({
             @Result(property = "date", column = "date", javaType = Date.class),
             @Result(property = "count", column = "count", javaType = Integer.class),

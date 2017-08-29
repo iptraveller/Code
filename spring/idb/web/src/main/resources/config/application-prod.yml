@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.18.33.191:38066/wis
+    url: jdbc:mysql://stacat:8066/wis
     username: root
     password: 123456
   thymeleaf:
@@ -17,4 +17,4 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-  file: D:\\sta-prod.log
+  file: ./sta.log
