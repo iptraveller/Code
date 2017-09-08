@@ -115,7 +115,7 @@ public interface StaMapper {
     })
     List<Map<String, Object>> getStaCountList();
 
-    @Select("select date,count(*) as count from sta_active where TO_DAYS(NOW()) - TO_DAYS(date) > 0 group by date order by date")
+    @Select("select date,sum(count) as count from sta_active_project where DATE_FORMAT(date,\"%H\")='00' and TO_DAYS(NOW()) - TO_DAYS(date) > 0 group by date order by date")
     @Results({
             @Result(property = "date", column = "date", javaType = Date.class),
             @Result(property = "count", column = "count", javaType = Integer.class),
@@ -185,4 +185,25 @@ public interface StaMapper {
             @Result(property = "city", column = "city", javaType = String.class)
     })
     Map<String, Object> getStaLocation(String mac);
+
+    @Select("select count(*) from sta_full where is_11a=1;")
+    Integer get11aCount();
+
+    @Select("select count(*) from sta_full where is_11b=1;")
+    Integer get11bCount();
+
+    @Select("select count(*) from sta_full where is_11g=1;")
+    Integer get11gCount();
+
+    @Select("select count(*) from sta_full where is_11an=1;")
+    Integer get11anCount();
+
+    @Select("select count(*) from sta_full where is_11bn=1;")
+    Integer get11bnCount();
+
+    @Select("select count(*) from sta_full where is_11ac=1;")
+    Integer get11acCount();
+
+    @Select("select count(*) from sta_full where is_11ac_wave2=1;")
+    Integer get11acWave2Count();
 }

@@ -7,6 +7,7 @@ import com.idb.entity.Sta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,4 +93,24 @@ public class StaService {
         return staMapper.getManufacturerCount();
     }
 
+    public Map<String, Integer> getCapacibility() {
+        Integer is11a = staMapper.get11aCount();
+        Integer is11b = staMapper.get11bCount();
+        Integer is11g = staMapper.get11gCount();
+        Integer is11an = staMapper.get11anCount();
+        Integer is11bn = staMapper.get11bnCount();
+        Integer is11ac = staMapper.get11acCount();
+        Integer is11acWave2 = staMapper.get11acWave2Count();
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("is11a", is11a);
+        map.put("is11b", is11b);
+        map.put("is11g", is11g);
+        map.put("is11an", is11an);
+        map.put("is11bn", is11bn);
+        map.put("is11ac", is11ac);
+        map.put("is11acWave2", is11acWave2);
+
+        return map;
+    }
 }

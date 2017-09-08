@@ -21,6 +21,12 @@ function drawPie(url,text,elementId) {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
+                color: [
+                    '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#40e0d0',
+                    '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#ffd700',
+                    '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0',
+                    '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed'
+                ],
                 legend: {
                     orient : 'vertical',
                     x : 'right',

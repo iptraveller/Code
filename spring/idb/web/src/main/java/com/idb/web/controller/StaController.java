@@ -280,4 +280,10 @@ public class StaController {
         }
         return result;
     }
+
+    @RequestMapping(value="/getCapacibilityStatistics", method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Integer> getCapacibilityStatistics(HttpServletRequest request, HttpServletResponse response) {
+        return staService.getCapacibility();
+    }
 }

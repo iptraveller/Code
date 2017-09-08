@@ -25,6 +25,7 @@
                     <div class="box">
                         <div class="box-body">
                             <div id="manufacturer" style="width:500px; height: 500px;"></div>
+                            <div id="capacibility" style="width:800px; height: 500px;"></div>
                             <div id="band" style="width:500px; height: 500px;"></div>
                             <div id="os" style="width:500px; height: 500px;"></div>
                             <div id="clientType" style="width:500px; height: 500px;"></div>
@@ -50,10 +51,54 @@
 <script src="../js/echarts.min.js"></script>
 <script src="../js/common.js"></script>
 <script>
-    drawPie('/sta/getManufacturerStatistics','厂商统计','manufacturer')
-    drawPie('/sta/getBandStatistics','双频能力统计','band')
-    drawPie('/sta/getOsStatistics','操作系统统计','os')
-    drawPie('/sta/getClientTypeStatistics','终端类型统计','clientType')
+    drawPie('/sta/getManufacturerStatistics','厂商统计','manufacturer');
+    drawPie('/sta/getBandStatistics','双频能力统计','band');
+    drawPie('/sta/getOsStatistics','操作系统统计','os');
+    drawPie('/sta/getClientTypeStatistics','终端类型统计','clientType');
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":'/sta/getCapacibilityStatistics',
+        "dataType":"json",
+        "success":function(response) {
+            var option = {
+                title : {
+                    text: '终端能力'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['终端数']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : ['11a','11b','11g','11an','11bn','11ac','11ac_wave2']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'终端数',
+                        type:'bar',
+                        data:[response.is11a,response.is11b,response.is11g,response.is11an,response.is11bn,response.is11ac,response.is11acWave2,]
+                    }
+                ]
+            };
+
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('capacibility'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
 </script>
 </body>
 </html>
