@@ -125,6 +125,7 @@
                         <div class="box-body">
                             <div id="sta_count_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_active_count_chart" style="width:1200px; height: 300px;"></div>
+                            <div id="sta_fresh_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_project_chart" style="width:1200px; height: 400px;"></div>
                             <div id="sta_province_chart" style="width:1200px; height: 300px;"></div>
                             <div id="sta_industry_chart" style="width:1200px; height: 300px;"></div>
@@ -574,6 +575,117 @@
 
             //初始化echarts实例
             var myChart = echarts.init(document.getElementById('sta_province_chart'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+    });
+
+    $.ajax({
+        "type":"post",
+        "async":false,
+        "url":"/sta/getStaFreshList",
+        "dataType":"json",
+        "success":function(response) {
+            var xData = []
+            var level0 = []
+            var level1 = []
+            var level2 = []
+            var level3 = []
+            var level4 = []
+            var level5 = []
+
+            response.forEach(function(value) {
+                if (value.date != undefined) {
+                    var time = new Date(value.date)
+                    xData.push(time.Format("yyyy-MM-dd"))
+                    level0.push(value.level0)
+                    level1.push(value.level1)
+                    level2.push(value.level2)
+                    level3.push(value.level3)
+                    level4.push(value.level4)
+                    level5.push(value.level5)
+                }
+            });
+
+            var option = {
+                title : {
+                    text: '终端新鲜度'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['90日前首次接入','前30~90日首次接入','前15~30日首次接入','前7~15日首次接入','前1~7日首次接入','当日新增']
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xData
+                    }
+                ],
+                color: [
+                    '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#40e0d0',
+                    '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#ffd700',
+                    '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0',
+                    '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed'
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'90日前首次接入',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level5
+                    },
+                    {
+                        name:'前30~90日首次接入',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level4
+                    },
+                    {
+                        name:'前15~30日首次接入',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level3
+                    },
+                    {
+                        name:'前7~15日首次接入',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level2
+                    },
+                    {
+                        name:'前1~7日首次接入',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level1
+                    },
+                    {
+                        name:'当日新增',
+                        type:'line',
+                        stack: '总量',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data:level0
+                    }
+                ]
+            };
+
+
+
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('sta_fresh_chart'));
             //使用制定的配置项和数据显示图表
             myChart.setOption(option);
         }

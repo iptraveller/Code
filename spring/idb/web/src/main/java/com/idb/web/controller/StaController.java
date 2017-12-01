@@ -250,6 +250,7 @@ public class StaController {
     public List<Map<String, Object>> getBandStatistics(HttpServletRequest request, HttpServletResponse response) {
         List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gCount();
         List<Map<String, Object>> result = new ArrayList<>();
+
         for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
             Map<String, Object> map = new HashMap<>();
             Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
@@ -266,6 +267,115 @@ public class StaController {
         return result;
     }
 
+    @RequestMapping(value="/getBandStatisticsPrev10Day", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getBandStatisticsPrev10Day(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gCountPrev10Day();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
+            Map<String, Object> map = new HashMap<>();
+            Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
+            if (is5g == 0) {
+                map.put("name", "--");
+            } else if (is5g == 1) {
+                map.put("name", "5g");
+            } else {
+                map.put("name", "2.4g");
+            }
+            map.put("value", sta5gStatistics.get("count"));
+            result.add(map);
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/getPhoneBandStatistics", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getPhoneBandStatistics(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gPhoneCount();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
+            Map<String, Object> map = new HashMap<>();
+            Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
+            if (is5g == 0) {
+                map.put("name", "--");
+            } else if (is5g == 1) {
+                map.put("name", "5g");
+            } else {
+                map.put("name", "2.4g");
+            }
+            map.put("value", sta5gStatistics.get("count"));
+            result.add(map);
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/getPhoneBandStatisticsPrev10Day", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getPhoneBandStatisticsPrev10Day(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gPhoneCountPrev10Day();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
+            Map<String, Object> map = new HashMap<>();
+            Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
+            if (is5g == 0) {
+                map.put("name", "--");
+            } else if (is5g == 1) {
+                map.put("name", "5g");
+            } else {
+                map.put("name", "2.4g");
+            }
+            map.put("value", sta5gStatistics.get("count"));
+            result.add(map);
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/getPcBandStatistics", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getPcBandStatistics(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gPcCount();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
+            Map<String, Object> map = new HashMap<>();
+            Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
+            if (is5g == 0) {
+                map.put("name", "--");
+            } else if (is5g == 1) {
+                map.put("name", "5g");
+            } else {
+                map.put("name", "2.4g");
+            }
+            map.put("value", sta5gStatistics.get("count"));
+            result.add(map);
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/getPcBandStatisticsPrev10Day", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getPcBandStatisticsPrev10Day(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> sta5gStatisticsList = staService.getSta5gPcCountPrev10Day();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> sta5gStatistics:sta5gStatisticsList) {
+            Map<String, Object> map = new HashMap<>();
+            Integer is5g = Integer.parseInt(sta5gStatistics.get("is5g").toString());
+            if (is5g == 0) {
+                map.put("name", "--");
+            } else if (is5g == 1) {
+                map.put("name", "5g");
+            } else {
+                map.put("name", "2.4g");
+            }
+            map.put("value", sta5gStatistics.get("count"));
+            result.add(map);
+        }
+        return result;
+    }
 
     @RequestMapping(value="/getClientTypeStatistics", method=RequestMethod.POST)
     @ResponseBody
@@ -285,5 +395,75 @@ public class StaController {
     @ResponseBody
     public Map<String, Integer> getCapacibilityStatistics(HttpServletRequest request, HttpServletResponse response) {
         return staService.getCapacibility();
+    }
+
+    @RequestMapping(value="/getStaFreshList", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getStaFreshList(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        List<Map<String, Object>> list = staService.getStaFreshList();
+        String d = null;
+        Map<String, Object> map = new HashMap<>();
+        for (Map<String, Object> m: list) {
+            if (d == null || !d.equals(m.get("date").toString())) {
+                result.add(map);
+                map = new HashMap<>();
+                map.put("level0",0);
+                map.put("level1",0);
+                map.put("level2",0);
+                map.put("level3",0);
+                map.put("level4",0);
+            }
+            d = m.get("date").toString();
+            map.put("date", m.get("date"));
+            Integer dist = Integer.parseInt(m.get("dist").toString());
+            Integer count = Integer.parseInt(m.get("count").toString());
+            if (dist == 0) {
+                if (map.get("level0") == null) {
+                    map.put("level0", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level0").toString());
+                    map.put("level0", a + count);
+                }
+            } else if (dist <= 7) {
+                if (map.get("level1") == null) {
+                    map.put("level1", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level1").toString());
+                    map.put("level1", a + count);
+                }
+            } else if (dist <= 15) {
+                if (map.get("level2") == null) {
+                    map.put("level2", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level2").toString());
+                    map.put("level2", a + count);
+                }
+            } else if (dist <= 30) {
+                if (map.get("level3") == null) {
+                    map.put("level3", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level3").toString());
+                    map.put("level3", a + count);
+                }
+            }  else if (dist <= 90) {
+                if (map.get("level4") == null) {
+                    map.put("level4", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level4").toString());
+                    map.put("level4", a + count);
+                }
+            } else {
+                if (map.get("level5") == null) {
+                    map.put("level5", count);
+                } else {
+                    Integer a = Integer.parseInt(map.get("level5").toString());
+                    map.put("level5", a + count);
+                }
+            }
+        }
+        result.add(map);
+
+        return result;
     }
 }
