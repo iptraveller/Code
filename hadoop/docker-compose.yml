@@ -1,0 +1,76 @@
+﻿version: '3'
+services: 
+  hadoop0:
+    container_name: hadoop0
+    image: sequenceiq/hadoop-docker:2.7.1
+    privileged: true
+    restart: always 
+    hostname: hadoop0
+    environment:
+      - HOSTNAME=hadoop0
+    ports:
+      - "50070:50070"
+      - "50075:50075"
+      - "8088:8088"
+    volumes:
+      - ./data/hadoop0/namenode:/home/namenode/
+      - ./data/hadoop0/datanode:/home/datanode/
+      - ./data/hadoop0/tmp:/home/tmp/
+      - ./config/hadoop0/hdfs-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/hdfs-site.xml
+      - ./config/hadoop0/core-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/core-site.xml
+      - ./config/hadoop0/mapred-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/mapred-site.xml
+      - ./config/hadoop0/yarn-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/yarn-site.xml
+    networks:
+      hadoop:
+         ipv4_address: 10.166.240.10
+
+  hadoop1:
+    container_name: hadoop1
+    image: sequenceiq/hadoop-docker:2.7.1
+    privileged: true
+    restart: always 
+    hostname: hadoop1
+    environment:
+      - HOSTNAME=hadoop0
+    ports:
+      - "50076:50075"
+    volumes:
+      - ./data/hadoop1/namenode:/home/namenode/
+      - ./data/hadoop1/datanode:/home/datanode/
+      - ./data/hadoop1/tmp:/home/tmp/
+      - ./config/hadoop1/hdfs-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/hdfs-site.xml
+      - ./config/hadoop1/core-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/core-site.xml
+      - ./config/hadoop1/mapred-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/mapred-site.xml
+      - ./config/hadoop1/yarn-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/yarn-site.xml
+    networks:
+      hadoop:
+         ipv4_address: 10.166.240.11
+
+  hadoop2:
+    container_name: hadoop2
+    image: sequenceiq/hadoop-docker:2.7.1
+    privileged: true
+    restart: always 
+    hostname: hadoop2
+    environment:
+      - HOSTNAME=hadoop0
+    ports:
+      - "50077:50075"
+    volumes:
+      - ./data/hadoop2/namenode:/home/namenode/
+      - ./data/hadoop2/datanode:/home/datanode/
+      - ./data/hadoop2/tmp:/home/tmp/
+      - ./config/hadoop2/hdfs-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/hdfs-site.xml
+      - ./config/hadoop2/core-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/core-site.xml
+      - ./config/hadoop2/mapred-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/mapred-site.xml
+      - ./config/hadoop2/yarn-site.xml:/usr/local/hadoop-2.7.1/etc/hadoop/yarn-site.xml
+    networks:
+      hadoop:
+         ipv4_address: 10.166.240.12
+
+networks:
+  hadoop:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.166.240.0/24
