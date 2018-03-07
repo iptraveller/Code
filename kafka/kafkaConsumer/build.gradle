@@ -1,0 +1,25 @@
+group 'Test'
+version '1.0.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'hello.Consumer'
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '24.0-jre'
+    compile group: 'org.apache.kafka', name: 'kafka_2.10', version: '0.9.0.0'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest.attributes 'Main-Class': 'hello.Consumer'
+}
